@@ -14,6 +14,14 @@ npm run serve
 ```
 npm run build
 ```
+# 账号
+```
+    test
+```
+# 密码
+```
+    test
+```
 
 ## Todo list
 
