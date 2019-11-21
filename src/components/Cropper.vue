@@ -63,6 +63,7 @@ export default {
         width: Number,
         height: Number,
         imgtype: String,
+        type: String,
     },
     components: {
         VueCropper,
@@ -84,20 +85,21 @@ export default {
     methods: {
         // 截图完成
         confirmImg() {
+          console.log(this.type)
         // 获取截图信息Blob  or Data
-            if (this.imgtype === 'Blob') {
-                this.$refs.cropper.getCropBlob((data) => {
-                    this.$emit('datafromCropper', data);
-                    // 全局提示
-                    this.$message.success('已截取');
-                });
-            } else if (this.imgtype === 'Base') {
-                this.$refs.cropper.getCropData((data) => {
-                    this.$emit('datafromCropper', data);
-                    // 全局提示
-                    this.$message.success('已截取');
-                });
-            }
+          if (this.imgtype === 'Blob') {
+              this.$refs.cropper.getCropBlob((data) => {
+                  this.$emit('datafromCropper', data);
+                  // 全局提示
+                  this.$message.success('已截取');
+              });
+          } else if (this.imgtype === 'Base') {
+              this.$refs.cropper.getCropData((data) => {
+                  this.$emit('datafromCropper', data);
+                  // 全局提示
+                  this.$message.success('已截取');
+              });
+          }
         },
         // 上传图片
         uploadImg(e) {

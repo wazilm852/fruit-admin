@@ -50,9 +50,16 @@
             </div>
         </div>
         <div class="cell-box" style="marin:0px;" >
-            <div class="title">商品图片</div>
+            <div class="title">商品主图</div>
             <div class="form">
-                <Cropper :width="width" :height="height" imgtype="Base"
+                <Cropper :width="width" :height="height" imgtype="Base" type="main"
+                 v-on:datafromCropper="datafromCropper"></Cropper>
+            </div>
+        </div>
+        <div class="cell-box" style="marin:0px;" >
+            <div class="title">商品详情图</div>
+            <div class="form">
+                <Cropper :width="width" :height="height" imgtype="Base" type="detail"
                  v-on:datafromCropper="datafromCropper"></Cropper>
             </div>
         </div>
@@ -94,6 +101,7 @@ export default {
                 price: null,
                 introduction: null,
                 image: null,
+                imageDetail: null
             },
             commodityType: [
                 {
@@ -115,7 +123,7 @@ export default {
                     label: '干果',
                 },
                 {
-                    label: '核果',
+                    label: '其他',
                 }
             ],
             value: false, //是否加入热卖
@@ -125,7 +133,7 @@ export default {
     mounted() { },
     methods: {
         submit() {
-            console.log(this.commodity);
+            // console.log(this.commodity);
             insertFruits(this.commodity).then((res) => {
                 console.log(res.data);
             }).catch((err) => {
@@ -136,12 +144,17 @@ export default {
             const CropperInfo = data;
             this.commodity.image = CropperInfo;
         },
+        dataDetail(data) {
+            console.log(data)
+            const CropperInfo = data;
+            this.commodity.imageDetail = CropperInfo;
+        }
     },
     computed: {
     },
     watch: {},
     components: {
-        Cropper,
+        Cropper
     },
 };
 </script>
