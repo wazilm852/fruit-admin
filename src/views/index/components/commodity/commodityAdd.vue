@@ -1,7 +1,7 @@
 <style lang='scss' scoped>
 @import "../../../../styles/public.scss";
 .son-app {
-    height: 100vh;
+    // height: 100vh;
     padding: 15px 25px;
     background: white;
     box-shadow: $box-shadow-base;
@@ -73,8 +73,21 @@
         <div class="cell-box" style="marin:0px;" >
             <div class="title">商品详情图</div>
             <div class="form">
-                <Cropper :width="width" :height="height" imgtype="Base" type="detail"
-                 v-on:datafromCropper="datafromCropper"></Cropper>
+                <!-- <Cropper :width="width" :height="height" imgtype="Base" type="detail"
+                 v-on:datafromCropper="datafromCropper"></Cropper> -->
+                 <el-upload
+                class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                multiple
+                :limit="3"
+                :on-exceed="handleExceed"
+                :file-list="fileList">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                </el-upload>
             </div>
         </div>
         <div class="cell-box" style="marin:0px;" >
@@ -130,17 +143,17 @@ export default {
             height: 200,
             // 表单
             commodity: {
-                name: null, //商品名称
-                type: null, //商品类型
-                price: null,  //商品价格
-                number: null, //商品库存数量
-                introduction: null, //商品介绍
-                image: null,    //商品主图
+                name: null,            //商品名称
+                type: null,            //商品类型
+                price: null,           //商品价格
+                number: null,          //商品库存数量
+                introduction: null,    //商品介绍
+                image: null,           //商品主图
                 imageDetail: null,     //商品详情图
-                specs: '斤', //商品规格
-                bestSellers: false, //是否加入热卖
-                news: false, //是否加入新品
-                upperShelf: false, //是否上架
+                specs: '斤',           //商品规格
+                bestSellers: false,    //是否加入热卖
+                news: false,           //是否加入新品
+                upperShelf: false,     //是否上架
             },
             commodityType: [
                 {
@@ -165,7 +178,16 @@ export default {
                     label: '其他',
                 }
             ],
-            
+            fileList: [
+                {
+                    name: '',
+                    url: ''
+                }
+            ],
+            // fileList: [
+            //     {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
+            //     {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}
+            // ],
         };
     },
     created() { },
@@ -187,6 +209,20 @@ export default {
             console.log(data)
             const CropperInfo = data;
             this.commodity.imageDetail = CropperInfo;
+        },
+
+        //上传详情图
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handleExceed(files, fileList) {
+            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${ file.name }？`);
         }
     },
     computed: {
