@@ -38,9 +38,23 @@
             </div>
         </div>
         <div class="cell-box">
+            <div class="title">商品规格</div>
+            <div class="form">
+                <el-radio v-model="commodity.specs" label="斤">斤</el-radio>
+                <el-radio v-model="commodity.specs" label="个">个</el-radio>
+                <el-radio v-model="commodity.specs" label="袋">袋</el-radio>
+            </div>
+        </div>
+        <div class="cell-box">
             <div class="title">价格</div>
             <div class="form">
                 <el-input v-model="commodity.price" placeholder="请输入价格"></el-input>
+            </div>
+        </div>
+        <div class="cell-box">
+            <div class="title">库存</div>
+            <div class="form">
+                <el-input v-model="commodity.number" placeholder="请输入库存数量"></el-input>
             </div>
         </div>
         <div class="cell-box">
@@ -67,7 +81,27 @@
             <div class="title">加入热卖</div>
             <div class="form">
                 <el-switch
-                v-model="value"
+                v-model="commodity.bestSellers"
+                active-color="#13ce66"
+                inactive-color="#dedede">
+                </el-switch>
+            </div>
+        </div>
+        <div class="cell-box" style="marin:0px;" >
+            <div class="title">加入新品</div>
+            <div class="form">
+                <el-switch
+                v-model="commodity.news"
+                active-color="#13ce66"
+                inactive-color="#dedede">
+                </el-switch>
+            </div>
+        </div>
+        <div class="cell-box" style="marin:0px;" >
+            <div class="title">上架</div>
+            <div class="form">
+                <el-switch
+                v-model="commodity.upperShelf"
                 active-color="#13ce66"
                 inactive-color="#dedede">
                 </el-switch>
@@ -96,12 +130,17 @@ export default {
             height: 200,
             // 表单
             commodity: {
-                name: null,
-                type: null,
-                price: null,
-                introduction: null,
-                image: null,
-                imageDetail: null
+                name: null, //商品名称
+                type: null, //商品类型
+                price: null,  //商品价格
+                number: null, //商品库存数量
+                introduction: null, //商品介绍
+                image: null,    //商品主图
+                imageDetail: null,     //商品详情图
+                specs: '斤', //商品规格
+                bestSellers: false, //是否加入热卖
+                news: false, //是否加入新品
+                upperShelf: false, //是否上架
             },
             commodityType: [
                 {
@@ -126,7 +165,7 @@ export default {
                     label: '其他',
                 }
             ],
-            value: false, //是否加入热卖
+            
         };
     },
     created() { },

@@ -38,8 +38,8 @@
 <template>
   <div class="info-left">
     <div class="test-button">
-      <label class="out-file" for="file1">选择图片</label>
-      <input type="file" id="file1" style="position:absolute; clip:rect(0 0 0 0);"
+      <label class="out-file" :for="type">选择图片</label>
+      <input type="file" :id="type" style="position:absolute; clip:rect(0 0 0 0);"
       accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
       <div class="wrapper" v-if="Croppershow">
         <VueCropper ref="cropper" :img="example3.img" :autoCrop="example3.autoCrop"
