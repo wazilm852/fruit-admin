@@ -123,7 +123,8 @@ titleMap
     .set('commodityManage', '商品管理')
     .set('commodityAdd', '商品添加')
     .set('order', '订单管理')
-    .set('users', '用户列表');
+    .set('users', '用户列表')
+    .set('addShopsType', '商品分类')
 export default {
     name: 'index',
     data() {

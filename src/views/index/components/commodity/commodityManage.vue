@@ -29,6 +29,7 @@
         <div class="commodity-layout">
             <div>
                 <el-button type="primary" @click="goTocommodityAdd">添加商品</el-button>
+                <el-button type="primary" @click="goTOaddShopsType">商品分类</el-button>
             </div>
             <div class="table-box">
                 <el-table :data="fruitsList" stripe border class="table">
@@ -100,6 +101,11 @@ export default {
             this.$router.push({
                 name: 'commodityAdd',
             });
+        },
+        goTOaddShopsType() {
+            this.$router.push({
+                name: 'addShopsType'
+            })
         },
         clickModify(index, row) {
             console.log(index, row);

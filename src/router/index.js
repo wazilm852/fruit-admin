@@ -11,6 +11,11 @@ export default new Router({
             component: () => import('../views/login/login.vue'),
         },
         {
+            path: '/message',
+            name: 'message',
+            component: () => import('../views/index/components/message/index.vue'),
+        },
+        {
             path: '/index',
             name: 'index',
             component: () => import('../views/index/index.vue'),
@@ -20,15 +25,23 @@ export default new Router({
                     path: '/commodityManage',
                     name: 'commodityManage',
                     component: () => import('../views/index/components/commodity/commodityManage.vue'),
-                }, {
+                }, 
+                {
                     path: '/commodityAdd',
                     name: 'commodityAdd',
                     component: () => import('../views/index/components/commodity/commodityAdd.vue'),
-                }, {
+                }, 
+                {
+                    path: '/addShopsType',
+                    name: 'addShopsType',
+                    component: () => import('../views/index/components/commodity/addShopsType.vue'),
+                }, 
+                {
                     path: '/order',
                     name: 'order',
                     component: () => import('../views/index/components/order/order.vue'),
-                }, {
+                }, 
+                {
                     path: '/users',
                     name: 'users',
                     component: () => import('../views/index/components/users/users.vue'),

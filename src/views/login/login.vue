@@ -161,7 +161,7 @@ export default {
             }
             GLOBAL.isLogin = true;
             this.$router.push({
-                name: 'index',
+                name: 'message',
             });
         },
         focusInput() {

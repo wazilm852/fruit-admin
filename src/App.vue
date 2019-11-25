@@ -17,3 +17,8 @@ export default {
     components: {},
 };
 </script>
+<style lang="scss">
+    html,body{
+        box-sizing: border-box;
+    }
+</style>
