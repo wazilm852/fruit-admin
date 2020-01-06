@@ -31,8 +31,8 @@
             <div class="title">商品类型</div>
             <div class="form">
                 <el-select v-model="commodity.type" placeholder="请选择" style="width:250px;">
-                    <el-option v-for="item in commodityType" :key="item.label"
-                     :label="item.label" :value="item.label">
+                    <el-option v-for="item in commodityType" :key="item.categoryName"
+                     :label="item.categoryName" :value="item.categoryId">
                     </el-option>
                 </el-select>
             </div>
@@ -40,9 +40,9 @@
         <div class="cell-box">
             <div class="title">商品规格</div>
             <div class="form">
-                <el-radio v-model="commodity.specs" label="斤">斤</el-radio>
-                <el-radio v-model="commodity.specs" label="个">个</el-radio>
-                <el-radio v-model="commodity.specs" label="袋">袋</el-radio>
+                <el-radio v-model="commodity.specs" label="0">斤</el-radio>
+                <el-radio v-model="commodity.specs" label="1">个</el-radio>
+                <el-radio v-model="commodity.specs" label="2">袋</el-radio>
             </div>
         </div>
         <div class="cell-box">
@@ -77,7 +77,7 @@
                  v-on:datafromCropper="datafromCropper"></Cropper> -->
                  <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="http://localhost:8090"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { insertFruits } from '../../../../api/all';
+import { insertFruits, categoryList } from '../../../../api/all';
 import Cropper from '../../../../components/Cropper.vue';
 
 export default {
@@ -150,34 +150,12 @@ export default {
                 introduction: null,    //商品介绍
                 image: null,           //商品主图
                 imageDetail: null,     //商品详情图
-                specs: '斤',           //商品规格
+                specs: '0',           //商品规格
                 bestSellers: false,    //是否加入热卖
                 news: false,           //是否加入新品
                 upperShelf: false,     //是否上架
             },
-            commodityType: [
-                {
-                    label: '柑橘',
-                },
-                {
-                    label: '核果',
-                },
-                {
-                    label: '浆果',
-                },
-                {
-                    label: '仁果',
-                },
-                {
-                    label: '瓜果',
-                },
-                {
-                    label: '干果',
-                },
-                {
-                    label: '其他',
-                }
-            ],
+            commodityType: [],
             fileList: [
                 {
                     name: '',
@@ -190,26 +168,47 @@ export default {
             // ],
         };
     },
-    created() { },
+    created() { 
+        categoryList({
+            
+        }).then((res) => {
+            this.commodityType = res.data.data
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
     mounted() { },
     methods: {
         submit() {
-            // console.log(this.commodity);
-            insertFruits(this.commodity).then((res) => {
+            insertFruits({
+                productName: this.commodity.name,
+                marketPrice: this.commodity.price,
+                productTips: '促销信息',
+                productDesc: this.commodity.introduction,
+                categoryId: this.commodity.type,
+                productStock: this.commodity.number,
+                productUnit: this.commodity.specs,
+                isHot: this.commodity.bestSellers ? 1 : 0,
+                isNew: this.commodity.news ? 1 : 0,
+                isSale: this.commodity.upperShelf ? 1 : 0,
+                productImg: this.commodity.image,
+                imgList: this.commodity.imageDetail,
+            }).then((res) => {
                 console.log(res.data);
             }).catch((err) => {
                 console.log(err);
             });
         },
         datafromCropper(data) {
+            console.log(data)
             const CropperInfo = data;
             this.commodity.image = CropperInfo;
         },
-        dataDetail(data) {
-            console.log(data)
-            const CropperInfo = data;
-            this.commodity.imageDetail = CropperInfo;
-        },
+        // dataDetail(data) {
+        //     console.log(data)
+        //     const CropperInfo = data;
+        //     this.commodity.imageDetail = CropperInfo;
+        // },
 
         //上传详情图
         handleRemove(file, fileList) {
@@ -219,9 +218,13 @@ export default {
             console.log(file);
         },
         handleExceed(files, fileList) {
+            console.log(files)
+            console.log(fileList)
             this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
         },
         beforeRemove(file, fileList) {
+            console.log(files)
+            console.log(fileList)
             return this.$confirm(`确定移除 ${ file.name }？`);
         }
     },

@@ -1,12 +1,12 @@
 <template>
     <div class="addShopsType">
         <el-tag
-        :key="tag"
+        :key="tag.categoryName"
         v-for="tag in dynamicTags"
         closable
         :disable-transitions="false"
-        @close="handleClose(tag)">
-        {{tag}}
+        @close="handleClose(tag.categoryName)">
+        {{tag.categoryName}}
         </el-tag>
         <el-input
         class="input-new-tag"
@@ -22,13 +22,24 @@
     </div>
 </template>
 <script>
+import { categoryList, addFruitCategory } from '../../../../api/all';
 export default {
     data() {
         return {
-            dynamicTags: ['干果', '瓜果', '仁果'],
+            dynamicTags: [],
             inputVisible: false,
             inputValue: ''
         }
+    },
+    created() {
+        categoryList({
+            
+        }).then((res) => {
+            this.dynamicTags = res.data.data
+        }).catch((err) => {
+            console.log(err);
+            
+        });
     },
     methods: {
         handleClose(tag) {
@@ -43,6 +54,8 @@ export default {
         },
 
         handleInputConfirm() {
+            console.log(this.inputValue)
+
             let inputValue = this.inputValue;
             let flag = false
             for(let i = 0; i < this.dynamicTags.length; i ++){
@@ -54,7 +67,12 @@ export default {
                 }
             }
             if (flag) {
-                this.dynamicTags.push(inputValue);
+                // this.dynamicTags.push(inputValue);
+                addFruitCategory(inputValue, 1).then((res) => {
+                    console.log(res)
+                }).catch((err) => {
+                    console.log(err)
+                })
             } else {
                 this.$message({
                 message: '该类别已存在，请勿重复添加',

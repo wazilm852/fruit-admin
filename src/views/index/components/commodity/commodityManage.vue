@@ -89,10 +89,10 @@ export default {
     methods: {
         getData(pageSize, currentPage) {
             getFruitsList(pageSize, currentPage).then((res) => {
-                console.log(res.data);
-                this.fruitsList = res.data.data.list;
-                this.totalCount = res.data.data.totalCount;
-                this.currentPage = res.data.data.currentPage;
+                console.log(res);
+                // this.fruitsList = res.data.data.list;
+                // this.totalCount = res.data.data.totalCount;
+                // this.currentPage = res.data.data.currentPage;
             }).catch((err) => {
                 console.log(err);
             });

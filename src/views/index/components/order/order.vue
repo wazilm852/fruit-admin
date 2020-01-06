@@ -132,9 +132,12 @@ export default {
             });
         },
         getData() {
-            getOrderList().then((res) => {
-                console.log(res.data.data);
-                this.orderList = res.data.data;
+            getOrderList({
+                pageNum: 1,
+                pageSize: 10
+            }).then((res) => {
+                console.log(res);
+                // this.orderList = res.data.data;
             }).catch((err) => {
                 console.log(err);
             });
