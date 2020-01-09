@@ -32,16 +32,19 @@ export default {
         }
     },
     created() {
-        categoryList({
-            
-        }).then((res) => {
-            this.dynamicTags = res.data.data
-        }).catch((err) => {
-            console.log(err);
-            
-        });
+        this.category()
     },
     methods: {
+        category() {
+            categoryList({
+            
+            }).then((res) => {
+                this.dynamicTags = res.data.data
+            }).catch((err) => {
+                console.log(err);
+                
+            });
+        },
         handleClose(tag) {
             this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
         },
@@ -68,8 +71,15 @@ export default {
             }
             if (flag) {
                 // this.dynamicTags.push(inputValue);
-                addFruitCategory(inputValue, 1).then((res) => {
+                addFruitCategory({
+                    categoryName: inputValue,
+                    isShow: 1
+                }).then((res) => {
                     console.log(res)
+                    if(res.data.code == 200) {
+                        this.$message.success('添加成功');
+                        this.category()
+                    }
                 }).catch((err) => {
                     console.log(err)
                 })

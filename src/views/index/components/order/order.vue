@@ -136,8 +136,10 @@ export default {
                 pageNum: 1,
                 pageSize: 10
             }).then((res) => {
+                if(res.data.code == 200) {
+                    // this.orderList = res.data.data.list;
+                }
                 console.log(res);
-                // this.orderList = res.data.data;
             }).catch((err) => {
                 console.log(err);
             });

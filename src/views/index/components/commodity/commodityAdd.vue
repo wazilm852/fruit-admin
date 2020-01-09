@@ -77,14 +77,16 @@
                  v-on:datafromCropper="datafromCropper"></Cropper> -->
                  <el-upload
                 class="upload-demo"
-                action="http://localhost:8090"
+                action="https://jsonplaceholder.typicode.com/posts/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
                 multiple
                 :limit="3"
                 :on-exceed="handleExceed"
-                :file-list="fileList">
+                :file-list="fileList"
+                :on-success="success"
+                :before-upload="beforeUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
                 <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                 </el-upload>
@@ -149,23 +151,20 @@ export default {
                 number: null,          //商品库存数量
                 introduction: null,    //商品介绍
                 image: null,           //商品主图
-                imageDetail: null,     //商品详情图
+                imageDetail: [],     //商品详情图
                 specs: '0',           //商品规格
                 bestSellers: false,    //是否加入热卖
                 news: false,           //是否加入新品
                 upperShelf: false,     //是否上架
             },
             commodityType: [],
-            fileList: [
-                {
-                    name: '',
-                    url: ''
-                }
-            ],
             // fileList: [
-            //     {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
-            //     {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}
+            //     {
+            //         name: '',
+            //         url: ''
+            //     }
             // ],
+            fileList: [],
         };
     },
     created() { 
@@ -180,6 +179,7 @@ export default {
     mounted() { },
     methods: {
         submit() {
+            console.log(this.commodity.imageDetail)
             insertFruits({
                 productName: this.commodity.name,
                 marketPrice: this.commodity.price,
@@ -212,20 +212,31 @@ export default {
 
         //上传详情图
         handleRemove(file, fileList) {
-            console.log(file, fileList);
         },
         handlePreview(file) {
-            console.log(file);
         },
         handleExceed(files, fileList) {
-            console.log(files)
-            console.log(fileList)
             this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
         },
         beforeRemove(file, fileList) {
-            console.log(files)
-            console.log(fileList)
             return this.$confirm(`确定移除 ${ file.name }？`);
+        },
+        success(response, file, fileList) {
+        },
+        beforeUpload(file) {
+            console.log(file)
+            this.previewFile(file)
+        },
+        previewFile(file) {
+            var reader  = new FileReader();
+            let that = this
+            reader.addEventListener("load", function () {
+                // that.commodity.imageDetail = reader.result;
+                that.commodity.imageDetail.push(reader.result);
+            }, false);
+            if (file) {
+                reader.readAsDataURL(file);
+            }
         }
     },
     computed: {

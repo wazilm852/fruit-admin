@@ -33,20 +33,20 @@
             </div>
             <div class="table-box">
                 <el-table :data="fruitsList" stripe border class="table">
-                    <el-table-column prop="name" label="商品名" min-width="100" align="center">
+                    <el-table-column prop="productName" label="商品名" min-width="100" align="center">
                     </el-table-column>
-                    <el-table-column prop="type" label="商品种类" min-width="100" align="center">
+                    <el-table-column prop="productDesc" label="商品种类" min-width="100" align="center">
                     </el-table-column>
-                    <el-table-column prop="price" label="商品价格" min-width="70" align="center" >
+                    <el-table-column prop="shopPrice" label="商品价格" min-width="70" align="center" >
                     </el-table-column>
-                    <el-table-column prop="introduction" label='商品介绍' min-width="150"
+                    <el-table-column prop="productTips" label='商品介绍' min-width="150"
                     align="center" >
                     </el-table-column>
-                    <el-table-column prop="image" label="商品图片"  min-width="50" align="center" >
+                    <el-table-column prop="productImg" label="商品图片"  min-width="50" align="center" >
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" placement="left">
                             <el-button type="text">查看图片</el-button>
-                            <img slot="content" v-bind:src="scope.row.image" />
+                            <img slot="content" v-bind:src="scope.row.productImg" />
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -59,6 +59,44 @@
                          </template>
                     </el-table-column>
                 </el-table>
+                <!-- 修改弹框 -->
+                <el-dialog
+                title="修改"
+                :visible.sync="dialogVisible"
+                width="30%"
+                :before-close="handleClose">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                        <el-form-item label="商品名称" prop="name">
+                            <el-input v-model="ruleForm.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="商品类型" prop="region">
+                            <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="商品价格" prop="price">
+                            <el-input v-model="ruleForm.price"></el-input>
+                        </el-form-item>
+                        <el-form-item label="商品介绍" prop="desc">
+                            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item label="加入热卖" prop="sellers">
+                            <el-switch v-model="ruleForm.sellers"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="加入新品" prop="newShop">
+                            <el-switch v-model="ruleForm.newShop"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="上架" prop="show">
+                            <el-switch v-model="ruleForm.show"></el-switch>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                            <el-button @click="resetForm('ruleForm')">重 置</el-button>
+                            <el-button @click="dialogVisible = false">取 消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-dialog>
             </div>
             <div class="paging-box">
                 <el-pagination background layout="prev, pager, next" :page-size="pageSize"
@@ -80,6 +118,30 @@ export default {
             totalCount: 0,
             currentPage: 0,
             fruitsList: [],
+            dialogVisible: false,  //修改弹框
+            ruleForm: {
+                name: '',
+                region: '',
+                price: '',
+                desc: '',
+                sellers: false,
+                newShop: false,
+                show: false,
+            },
+            rules: {
+                name: [
+                    { required: true, message: '请输入商品名称', trigger: 'blur' },
+                ],
+                price: [
+                    { required: true, message: '请输入商品价格', trigger: 'blur' },
+                ],
+                region: [
+                    { required: true, message: '请选择商品类型', trigger: 'change' }
+                ],
+                desc: [
+                    { required: true, message: '请填写商品介绍', trigger: 'blur' }
+                ]
+            }
         };
     },
     created() {
@@ -88,11 +150,14 @@ export default {
     mounted() { },
     methods: {
         getData(pageSize, currentPage) {
-            getFruitsList(pageSize, currentPage).then((res) => {
+            getFruitsList({
+                pageNum: currentPage,
+                pageSize: pageSize
+            }).then((res) => {
                 console.log(res);
-                // this.fruitsList = res.data.data.list;
-                // this.totalCount = res.data.data.totalCount;
-                // this.currentPage = res.data.data.currentPage;
+                if(res.data.code == 200) {
+                    this.fruitsList = res.data.data;
+                }
             }).catch((err) => {
                 console.log(err);
             });
@@ -108,6 +173,7 @@ export default {
             })
         },
         clickModify(index, row) {
+            this.dialogVisible = true
             console.log(index, row);
         },
         clickDelete(index, row) {
@@ -147,6 +213,28 @@ export default {
         changePage(e) {
             this.getData(10, e);
         },
+        // 修改弹框
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.$message.success('修改成功');
+                this.dialogVisible = false
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        }
     },
     computed: {},
     watch: {},

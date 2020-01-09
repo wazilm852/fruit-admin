@@ -3,27 +3,24 @@ import request from '@/utils/request';
 // 网页获取水果分类列表
 export function categoryList() {
     return request({
-        url: '/admin/category/list',
+        url: '/category/list',
         method: 'get',
         params: {},
     });
 }
 // 添加水果分类
-export function addFruitCategory(categoryName, isShow) {
+export function addFruitCategory(data) {
     return request({
-        url: '/admin/category/list',
-        method: 'get',
-        params: {
-            categoryName,
-            isShow
-        },
+        url: '/category/insert',
+        method: 'post',
+        data: data
     });
 }
 
 // 网页获取水果列表
 export function getFruitsList(data) {
     return request({
-        url: '/admin/product/list',
+        url: '/product/list',
         method: 'post',
         data: data
     });
@@ -31,7 +28,7 @@ export function getFruitsList(data) {
 // 水果插入
 export function insertFruits(data) {
     return request({
-        url: '/admin/product/insert',
+        url: '/product/insert',
         method: 'post',
         data: data,
     });
@@ -73,16 +70,17 @@ export function updateFruitsInfo(pkId, name, type, price, image, introduction) {
     });
 }
 // 获取用户列表
-export function getUserList() {
+export function getUserList(data) {
     return request({
         url: '/user/list',
-        method: 'get',
+        method: 'post',
+        data: data
     });
 }
 // 获取订单列表
 export function getOrderList(data) {
     return request({
-        url: '/admin/order/list',
+        url: '/order/list',
         method: 'post',
         data: data
     });

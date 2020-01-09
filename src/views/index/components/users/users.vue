@@ -28,15 +28,15 @@
         <div class="commodity-layout">
             <div class="table-box">
                 <el-table :data="userInfo" stripe border class="table">
-                    <el-table-column prop="pkId" label="用户id" min-width="100" align="center">
+                    <el-table-column prop="userId" label="用户id" min-width="100" align="center">
                     </el-table-column>
-                    <el-table-column prop="name" label="姓名" min-width="100" align="center">
+                    <el-table-column prop="nickname" label="姓名" min-width="100" align="center">
                     </el-table-column>
                     <el-table-column prop="sex" label="性别" min-width="100" align="center" >
                     </el-table-column>
                     <el-table-column prop="birth" label="生日" min-width="100" align="center" >
                     </el-table-column>
-                    <el-table-column prop="telphone" label='电话' min-width="150"
+                    <el-table-column prop="phone" label='电话' min-width="150"
                     align="center" >
                     </el-table-column>
                 </el-table>
@@ -53,7 +53,7 @@
 import { getUserList } from '../../../../api/all';
 
 export default {
-    name: 'users',
+    nickname: 'users',
     data() {
         return {
             totalCount: 10,
@@ -61,11 +61,11 @@ export default {
             currentPage: 1,
             orderState: '发货',
             userInfo: [{
-                pkId: null,
-                name: null,
+                userId: null,
+                nickname: null,
                 birth: null,
                 sex: null,
-                telphone: null,
+                phone: null,
             }],
         };
     },
@@ -75,9 +75,15 @@ export default {
     mounted() { },
     methods: {
         getData() {
-            getUserList().then((res) => {
-                this.userInfo = res.data.data;
-                console.log(res.data.data);
+            getUserList({
+                pageNum: 1,
+	            pageSize: 10
+            }).then((res) => {
+                if(res.data.code == 200) {
+
+                }
+                this.userInfo = res.data.data.list;
+                console.log(res);
             });
         },
     },
